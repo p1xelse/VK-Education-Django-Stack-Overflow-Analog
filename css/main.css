@@ -1,0 +1,24 @@
+main > .container {
+  padding: 60px 15px 0;
+}
+
+
+.question {
+    border: 3px solid #6a6ac7;
+    border-radius: 10px;
+    margin: 20px;
+    padding: 10px;
+}
+
+
+
+.avatar-question {
+    width: 110px;
+    height: 130px;
+}
+
+
+.novbar-bmstu-img {
+    width: 30px;
+    margin-right: 10px;
+}
