@@ -1,0 +1,79 @@
+{% extends "inc/base.html" %}
+
+{% block content %}
+
+<div class="col-7 mt-5">
+    <h3>Log In</h3>
+    <div class="alert alert-danger" role="alert">
+        Invalid password or login!    
+    </div>
+    <form>
+        <div class="mb-3">
+            <label for="InputLogin" class="form-label">Login</label>
+            <input type="text" class="form-control" id="InputLogin" aria-describedby="loginHelp">
+        </div>
+        <div class="mb-3">
+            <label for="InputPassword" class="form-label">Password</label>
+            <input type="password" class="form-control" id="InputPassword1">
+        </div>
+        <div class="mb-3">  
+            <label for="repInputPassword" class="form-label">Repeat password</label>
+            <input type="password" class="form-control" id="repInputPassword">
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+
+{% endblock %}
+
+{% block side_panel %}
+
+<div class="tags-area mt-5">
+    <h2 class="mt-5">Tags</h2>
+    <div class="tags-list">
+        <a href="">OOP</a>
+        <a href="">Phisics</a>
+        <a href="">Math</a>
+        <a href="">Some tag</a>
+    </div>
+</div>
+
+<div class="best-members-area mt-5">
+    <h2 class="mt-5">Best Members</h2>
+    <div class="best-members-list">
+        <a href="">You</a>
+        <a href="">Freeman</a>
+        <a href="">Pudge</a>
+        <a href="">Lina</a>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block autorize_section %}
+
+{% comment %} <div class="d-flex ms-auto">
+    <a href="https://vk.com/dmitryggwp"><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}" alt=""></a>
+    <div class="autorize-section">
+        <p class="mb-0" style="color:white">Profile name</p>
+        <div>
+            <a class="me-2" href="base log in.html">log out</a>
+            <a href="">settings</a>
+        </div>
+    </div>
+</div> {% endcomment %}
+
+
+<div class="d-flex ms-auto">
+    <div class="autorize-section">
+        <div>
+            <a class="me-2" href="">log in</a>
+            <a href="">register</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock autorize_section %} 
