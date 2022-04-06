@@ -33,7 +33,8 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="sticky-footer-navbar.css" rel="stylesheet">
+    {% comment %}
+    <link href="sticky-footer-navbar.css" rel="stylesheet"> {% endcomment %}
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -54,6 +55,28 @@
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                     {% block autorize_section %}
+                    {% if user.is_authenticated %}Hello, {{ user.username }}.
+                    <div class="d-flex ms-auto">
+                        <a href=""><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}"
+                                alt=""></a>
+                        <div class="autorize-section">
+                            <p class="mb-0" style="color:white">{{ user.name }}</p>
+                            <div>
+                                <a class="me-2" href="">log out</a>
+                                <a href="">settings</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="d-flex ms-auto">
+                        <div class="autorize-section">
+                            <div>
+                                <a class="me-2" href="{% url "login" %}">log in</a>
+                                <a href="{% url "signup" %}">register</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
                     {% endblock autorize_section %}
                 </div>
             </div>
@@ -73,26 +96,12 @@
                 </div>
                 <div class="col-3">
                     {% block side_panel %}
-                    {% endblock side_panel %}
+                    {% include "inc/tags_membs_side.html" %}
+                    {% endblock %}
                 </div>
             </div>
         </div>
     </main>
-
-
-    <!--<footer class="footer mt-auto py-3 bg-light">-->
-    <!--    <div class="container">-->
-    <!--        <span class="text-muted">Place sticky footer content here.</span>-->
-    <!--    </div>-->
-    <!--</footer>-->
-
-
-    <script src="/docs/5.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous">
-    </script>
-    
-
-
 </body>
 
 </html>

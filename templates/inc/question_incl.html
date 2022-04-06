@@ -13,11 +13,14 @@
         </div>
     </div>
     <div class="col-10 ps-5">
-        <h3> <a = href="{% url "question" question.number %}"> {{ question.title }}</a> </h3>
+        <h3>
+            <a=href="{% url "question" question.number %}"> {{ question.title }}</a>
+        </h3>
         <p> {{ question.text }} </p>
         <span class="row">
-            <a class="ans-href-with-count" href="{% url "question" question.number %}">answers({{ question.answers_count }})</a>
-            <span style="width: auto" >
+            <a class="ans-href-with-count"
+                href="{% url "question" question.number %}">answers({{ question.answers_count }})</a>
+            <span style="width: auto">
                 Tags:
                 {% for tag in question.tag %}
                 <a href="{% url "tag" tag %}">{{ tag }}</a>
