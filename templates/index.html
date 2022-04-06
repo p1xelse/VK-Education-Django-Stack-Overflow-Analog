@@ -4,73 +4,11 @@
 
 <h2 class="mt-5"> {{ page_title }} </h2>
 
-{% for question in questions %}
+{% for question in page_obj %}
 {% include "inc/question_incl.html" %}
 {% endfor %}
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-            <a class="page-link">Previous</a>
-        </li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item">
-            <a class="page-link" href="#">Next</a>
-        </li>
-    </ul>
-</nav>
 
+{% include "inc/paginator.html" %}
 
 {% endblock %}
 
-{% block side_panel %}
-
-<div class="tags-area mt-5">
-    <h2 class="mt-5">Tags</h2>
-    <div class="tags-list">
-        <a href="">OOP</a>
-        <a href="">Phisics</a>
-        <a href="">Math</a>
-        <a href="">Some tag</a>
-    </div>
-</div>
-
-<div class="best-members-area mt-5">
-    <h2 class="mt-5">Best Members</h2>
-    <div class="best-members-list">
-        <a href="">You</a>
-        <a href="">Freeman</a>
-        <a href="">Pudge</a>
-        <a href="">Lina</a>
-    </div>
-</div>
-
-{% endblock %}
-
-
-{% block autorize_section %}
-
-{% comment %} <div class="d-flex ms-auto">
-    <a href="https://vk.com/dmitryggwp"><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}" alt=""></a>
-    <div class="autorize-section">
-        <p class="mb-0" style="color:white">Profile name</p>
-        <div>
-            <a class="me-2" href="base log in.html">log out</a>
-            <a href="">settings</a>
-        </div>
-    </div>
-</div> {% endcomment %}
-
-
-<div class="d-flex ms-auto">
-    <div class="autorize-section">
-        <div>
-            <a class="me-2" href="{% url "login" %}">log in</a>
-            <a href="{% url "signup" %}">register</a>
-        </div>
-    </div>
-</div>
-
-
-{% endblock autorize_section %}
