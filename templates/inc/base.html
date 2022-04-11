@@ -30,11 +30,6 @@
             }
         }
     </style>
-
-
-    <!-- Custom styles for this template -->
-    {% comment %}
-    <link href="sticky-footer-navbar.css" rel="stylesheet"> {% endcomment %}
 </head>
 
 <body class="d-flex flex-column h-100">
@@ -53,17 +48,18 @@
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
+                        <a class="ms-5 btn btn-outline-primary" href="{% url "ask" %}" type="submit">Ask!</a>
                     </form>
                     {% block autorize_section %}
-                    {% if user.is_authenticated %}Hello, {{ user.username }}.
+                    {% if user.is_authenticated == True %}
                     <div class="d-flex ms-auto">
                         <a href=""><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}"
                                 alt=""></a>
                         <div class="autorize-section">
                             <p class="mb-0" style="color:white">{{ user.name }}</p>
                             <div>
-                                <a class="me-2" href="">log out</a>
-                                <a href="">settings</a>
+                                <a class="me-2" href="{% url "logout" %}">log out</a>
+                                <a href="{% url "settings" %}">settings</a>
                             </div>
                         </div>
                     </div>
@@ -84,8 +80,6 @@
     </header>
 
     </form>
-
-
     <!-- Begin page content -->
     <main class="flex-shrink-0">
         <div class="container">
@@ -103,5 +97,12 @@
         </div>
     </main>
 </body>
+
+<footer class="footer mt-auto py-3 bg-light">
+    <div class="container">
+      <span class="text-muted">Contribute:</span>
+      <a href="https://vk.com/id182716750"> Author </a>
+    </div>
+</footer>
 
 </html>

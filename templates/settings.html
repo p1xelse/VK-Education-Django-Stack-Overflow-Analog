@@ -3,39 +3,32 @@
 {% block content %}
 
 <div class="col-7 mt-5">
-    <h3>Registration</h3>
+    <h3>Settings</h3>
     <div class="alert alert-warning" role="alert">
         Sorry, this email address is already regisred!    
     </div>
     <form>
         <div class="mb-3">
             <label for="InputLogin" class="form-label">Login</label>
-            <input type="text" maxlength="32" class="form-control" id="InputLogin" aria-describedby="loginHelp">
+            <input type="text" value="{{user.login}}" maxlength="32" class="form-control" id="InputLogin" aria-describedby="loginHelp">
         </div>
         <div class="mb-3">
             <label for="InputEmail1" class="form-label">Email address</label>
-            <input type="email" maxlength="256" class="form-control" id="InputEmail" aria-describedby="emailHelp">
+            <input type="email" value="{{user.email}}" maxlength="256" class="form-control" id="InputEmail" aria-describedby="emailHelp">
             <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
         </div>
 
         <div class="mb-3">
             <label for="InputNickName"  class="form-label">NickName</label>
-            <input type="text" maxlength="32" class="form-control" id="InputNickName">
+            <input type="text" value="{{user.name}}" maxlength="32" class="form-control" id="InputNickName">
         </div>
-        <div class="mb-3">
-            <label for="InputPassword" class="form-label">Password</label>
-            <input type="password" maxlength="32" class="form-control" id="InputPassword1">
-        </div>
-        <div class="mb-3">  
-            <label for="repInputPassword" class="form-label">Repeat password</label>
-            <input type="password" maxlength="32" class="form-control" id="repInputPassword">
-        </div>
+
         
         <div class="col-md-9 pe-5 mb-3">
             <label for="formFileSm" class="form-label">Upload avatar image</label>
             <input class="form-control form-control-sm" id="formFileSm" type="file" />
           </div>
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">Save</button>
     </form>
 </div>
 
