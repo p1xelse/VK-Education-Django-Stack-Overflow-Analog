@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<h2 class="mt-5"> {{ page_title }} </h2>
+<div>
+    <h2 style="display: inline-block" class="mt-5 index-header"> {{ page_title }} </h2>
+    {%if page_title != "Hot questions"%}
+    <a href="{% url "hot"%}"> Hot Questions</a>
+    {% endif %}
+</div>
 
 {% for question in page_obj %}
 {% include "inc/question_incl.html" %}
@@ -11,4 +16,3 @@
 {% include "inc/paginator.html" %}
 
 {% endblock %}
-

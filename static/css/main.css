@@ -18,6 +18,11 @@ main>.container {
     font-size: 14px;
 }
 
+.index-header {
+    display: inline-block;
+    margin-right: 10px;
+}
+
 .btn-answer {
     margin-left: calc(var(--bs-gutter-x) * .5);
 }

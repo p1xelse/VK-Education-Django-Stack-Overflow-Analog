@@ -12,8 +12,7 @@
             <div class="alert alert-danger" role="alert">
                 Title cannot be empty!
             </div>
-            <input placeholder="Briefly description of the issue" type="email" class="form-control" id="input-question"
-                aria-describedby="emailHelp">
+            <input placeholder="Briefly description of the issue" type="text" maxlength="120" class="form-control" id="input-question">
         </div>
         <div class="mb-3">
             <label for="questionTextArea" class="form-label">Question</label>
@@ -22,8 +21,7 @@
         </div>
         <div class="mb-3">
             <label for="questionTags" class="form-label">Tags</label>
-            <input placeholder="Math, Phisics ..." type="text" class="form-control" id="questionTags"
-                aria-describedby="emailHelp">
+            <input placeholder="Math, Phisics ..." type="text" maxlength="256" class="form-control" id="questionTags">
         </div>
         <button type="submit" class="btn btn-primary">Ask</button>
     </form>

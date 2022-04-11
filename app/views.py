@@ -1,4 +1,3 @@
-import struct
 from django.shortcuts import render
 from django.http import HttpResponse
 from paginator import paginate
@@ -21,8 +20,7 @@ QUESTIONS = [
     } for i in range(20)
 ]
 
-USER = {"is_authenticated": True, "name": "Vasya Pipkin"}
-
+USER = {"is_authenticated": True, "name": "Vasya Pipkin", "email": "vas@mail.ru", "login": "p1xel"}
 
 def index(request):
     page_obj = paginate(list(QUESTIONS), request, 5)
@@ -30,29 +28,37 @@ def index(request):
 
 
 def ask(request):
-    return render(request, "ask.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "ask.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
 
 
 def question(request, i: int):
     answers = paginate(list(QUESTIONS[i]["answers"]), request, 5)
-    return render(request, "question.html", {"page_obj": answers, "question": QUESTIONS[i], "tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "question.html", {"page_obj": answers, "question": QUESTIONS[i], "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
 
 
 def hot_questions(request):
     questions_hot = filter(lambda x: x["hot"] == True, QUESTIONS)
     page_obj = paginate(list(questions_hot), request, 5)
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": "Hot questions", "tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "index.html", {"page_obj": page_obj, "page_title": "Hot questions", "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
 
 
 def questions_with_tag(request, tag: str):
     question_with_tag = filter(lambda x: tag in x["tag"], QUESTIONS)
     page_obj = paginate(list(question_with_tag), request, 5)
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": f"Tag: {tag}", "tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "index.html", {"page_obj": page_obj, "page_title": f"Tag: {tag}", "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
 
 
 def signup(request):
-    return render(request, "signup.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "signup.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
 
 
 def login(request):
-    return render(request, "login.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS})
+    return render(request, "login.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+
+def settings(request):
+    return render(request, "settings.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+
+def logout(request):
+    page_obj = paginate(list(QUESTIONS), request, 5)
+    USER["is_authenticated"] = False
+    return render(request, "index.html", {"page_obj": page_obj, "page_title": "New questions", "tags_list": TAGS, "user": USER, "best_memb_list": BEST_MEMBS})
