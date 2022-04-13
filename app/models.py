@@ -1,13 +1,12 @@
-from email.policy import default
-import imp
-import profile
-from tkinter import CASCADE
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models import Count, Sum
 
 
 class ProfileManager(models.Manager):
-    pass
+    def get_top_users(self, count=5):
+        return self.annotate(answers_count=Count('answer')).order_by('-answers_count')[:count]
+
 
 class Profile(models.Model):
     avatar = models.ImageField(null=True, blank=True)
@@ -16,10 +15,11 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}"
-    pass
+
 
 class TagManager(models.Manager):
-    pass
+    def top_tags(self, count=10):
+        return self.annotate(que_count=Count('question')).order_by('-que_count')[:count]
 
 
 class Tag(models.Model):
@@ -31,7 +31,20 @@ class Tag(models.Model):
 
 
 class QuestionManager(models.Manager):
-    pass
+    def count_answers(self):
+        return self.annotate(answers=Count('answer', distinct=True))
+
+    def new(self):
+        return self.count_answers().order_by('-publish_date')
+
+    def hot(self):
+        return self.count_answers().order_by('-rating')
+
+    def by_tag(self, tag):
+        return self.count_answers().filter(tags__name=tag)
+
+    def by_id(self, id):
+        return self.get(id=id)
 
 
 class Question(models.Model):
@@ -45,15 +58,17 @@ class Question(models.Model):
 
     def __str__(self):
         return self.title
-    
-    object = QuestionManager()
+
+    objects = QuestionManager()
 
 
 class AnswerManager(models.Manager):
-    pass
+    def answer_by_question(self, que_id):
+        return self.annotate(likes=Count('likeanswer')).order_by('publish_date').filter(question_id=que_id)
 
 
 class Answer(models.Model):
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.CharField(max_length=256)
     text = models.TextField()
     correct = models.BooleanField(default=False)
@@ -63,8 +78,6 @@ class Answer(models.Model):
     objects = AnswerManager()
 
 
-
-
 class LikeQuestion(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -72,12 +85,6 @@ class LikeQuestion(models.Model):
 
 
 class LikeAnswer(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
+    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     pub_date = models.DateTimeField(auto_now_add=True)
-    
-
-
-
-
-

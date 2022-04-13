@@ -16,8 +16,8 @@
         <p> {{ question.text }} </p>
         <div class="block-after-question-text">
             <span>Tags:
-                {% for tag in question.tag %}
-                <a href="{% url "tag" tag %}">{{ tag }}</a>
+                {% for tag in question.tags.all %}
+                <a href="{% url "tag" tag.name %}">{{ tag.name }}</a>
                 {% endfor %}
             </span>
         </div>
@@ -37,14 +37,13 @@
             </div>
 
             <div>
-                <a href="#" title="Love it" class="love-btn" data-count="0">
+                <a href="#" title="Love it" class="love-btn" data-count="{{ans.likes}}">
                     <span>&#x2764;</span>
                 </a>
             </div>
         </div>
         <div class="col-10 ps-5">
-            <h3>Answer</h3>
-            <p> {{ ans }} </p>
+            <p> {{ ans.text }} </p>
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
                 <label class="form-check-label" for="flexCheckChecked">

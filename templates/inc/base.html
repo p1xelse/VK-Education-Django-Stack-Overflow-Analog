@@ -51,7 +51,7 @@
                         <a class="ms-5 btn btn-outline-primary" href="{% url "ask" %}" type="submit">Ask!</a>
                     </form>
                     {% block autorize_section %}
-                    {% if user.is_authenticated == True %}
+                    {% if auth == True %}
                     <div class="d-flex ms-auto">
                         <a href=""><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}"
                                 alt=""></a>

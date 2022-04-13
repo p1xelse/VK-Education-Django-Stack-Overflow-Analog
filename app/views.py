@@ -1,64 +1,101 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from paginator import paginate
-# Create your views here.
+from app.models import *
 
-TEXT = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-ANSWERS = ["It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English."] * 20
-TAGS = ["OOP", "Math", "Cg", "Web"]
-BEST_MEMBS = ["Lina", "Pudge", "You", "MrFreeman"]
 
-QUESTIONS = [
-    {
-        "title": f"How to build a moon park? {i}",
-        "text": f"This is text for question #{i}\n{TEXT}",
-        "number": i,
-        "tag": {"Math", "OOP" if i % 2 else "Cg"},
-        "hot": True if (i % 2 == 0) else False,
-        "answers_count": 20,
-        "answers": ANSWERS
-    } for i in range(20)
-]
+top_users = Profile.objects.get_top_users(10)
 
-USER = {"is_authenticated": True, "name": "Vasya Pipkin", "email": "vas@mail.ru", "login": "p1xel"}
+
+USER = {"is_auth": True}
 
 def index(request):
-    page_obj = paginate(list(QUESTIONS), request, 5)
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": "New questions", "tags_list": TAGS, "user": USER, "best_memb_list": BEST_MEMBS})
+    questions = Question.objects.new()
+    page_obj = paginate(questions, request, 10)
+    top_tags = Tag.objects.top_tags(10)
+    context = {
+        "page_obj": page_obj,
+        "best_memb_list": top_users,
+        "page_title": "New questions",
+        "tags_list": top_tags,
+        "auth": USER['is_auth']
+    }
+
+    return render(request, "index.html", context)
 
 
 def ask(request):
-    return render(request, "ask.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    return render(request, "ask.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER, })
 
 
 def question(request, i: int):
-    answers = paginate(list(QUESTIONS[i]["answers"]), request, 5)
-    return render(request, "question.html", {"page_obj": answers, "question": QUESTIONS[i], "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    question = Question.objects.by_id(i)
+    answers = paginate(Answer.objects.answer_by_question(i), request, 10)
+    top_tags = Tag.objects.top_tags(10)
+    context = {
+        "page_obj": answers,
+        "question": question,
+        "best_memb_list": top_users,
+        "tags_list": top_tags,
+        "auth": USER['is_auth']
+    }
+    return render(request, "question.html", context)
 
 
 def hot_questions(request):
-    questions_hot = filter(lambda x: x["hot"] == True, QUESTIONS)
-    page_obj = paginate(list(questions_hot), request, 5)
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": "Hot questions", "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    questions = Question.objects.hot()
+    page_obj = paginate(questions, request, 10)
+    top_tags = Tag.objects.top_tags(10)
+    context = {
+        "page_obj": page_obj,
+        "best_memb_list": top_users,
+        "page_title": "Hot questions",
+        "tags_list": top_tags,
+        "auth": USER['is_auth']
+    }
 
+    return render(request, "index.html", context)
 
 def questions_with_tag(request, tag: str):
-    question_with_tag = filter(lambda x: tag in x["tag"], QUESTIONS)
-    page_obj = paginate(list(question_with_tag), request, 5)
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": f"Tag: {tag}", "tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    questions = Question.objects.by_tag(tag)
+    page_obj = paginate(questions, request, 10)
+    context = {
+        "page_obj": page_obj,
+        "best_memb_list": top_users,
+        "page_title": f"Tag: {tag}",
+        "tags_list": Tag.objects.top_tags(10),
+        "auth": USER['is_auth']
+    }
+    return render(request, "index.html", context)
 
 
 def signup(request):
-    return render(request, "signup.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    context = {
+        "best_memb_list": top_users,
+        "tags_list": Tag.objects.top_tags(10),
+        "auth": False
+    }
+    return render(request, "signup.html", context)
 
 
 def login(request):
-    return render(request, "login.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    context = {
+        "best_memb_list": top_users,
+        "tags_list": Tag.objects.top_tags(10),
+        "auth": False
+    }
+    return render(request, "login.html", context)
+
 
 def settings(request):
-    return render(request, "settings.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER,})
+    context = {
+        "best_memb_list": top_users,
+        "tags_list": Tag.objects.top_tags(10),
+        "auth": True
+    }
+    return render(request, "settings.html", context)
+
 
 def logout(request):
-    page_obj = paginate(list(QUESTIONS), request, 5)
-    USER["is_authenticated"] = False
-    return render(request, "index.html", {"page_obj": page_obj, "page_title": "New questions", "tags_list": TAGS, "user": USER, "best_memb_list": BEST_MEMBS})
+    USER['is_auth'] = False
+    return redirect(index)
