@@ -9,6 +9,7 @@ top_users = Profile.objects.get_top_users(10)
 
 USER = {"is_auth": True}
 
+
 def index(request):
     questions = Question.objects.new()
     page_obj = paginate(questions, request, 10)
@@ -55,6 +56,7 @@ def hot_questions(request):
     }
 
     return render(request, "index.html", context)
+
 
 def questions_with_tag(request, tag: str):
     questions = Question.objects.by_tag(tag)

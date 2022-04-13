@@ -93,7 +93,8 @@ class Command(BaseCommand):
         for i in range(count):
             tags_count_quiestion = random.randint(1, 5)
             for j in range(tags_count_quiestion):
-                tag = Tag.objects.get(id=random.randint(tag_id, tag_id+tags_cout-1))
+                tag = Tag.objects.get(
+                    id=random.randint(tag_id, tag_id+tags_cout-1))
                 q_list[i].tags.add(tag)
 
         print("Question DONE")
