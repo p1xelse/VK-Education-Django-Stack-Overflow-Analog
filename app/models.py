@@ -64,7 +64,8 @@ class Question(models.Model):
 
 class AnswerManager(models.Manager):
     def answer_by_question(self, que_id):
-        return self.annotate(likes=Count('likeanswer')).order_by('publish_date').filter(question_id=que_id)
+        return self.annotate(likes=Count('likeanswer')) \
+            .order_by('publish_date').filter(question_id=que_id)
 
 
 class Answer(models.Model):

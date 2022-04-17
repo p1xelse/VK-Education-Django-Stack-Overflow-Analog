@@ -26,20 +26,25 @@ def index(request):
 
 
 def ask(request):
-    return render(request, "ask.html", {"tags_list": TAGS, "best_memb_list": BEST_MEMBS, "user": USER, })
+    return render(request, "ask.html", {"tags_list": Tag.objects.top_tags(10),
+                                        "best_memb_list": top_users, "user": USER, })
 
 
 def question(request, i: int):
-    question = Question.objects.by_id(i)
-    answers = paginate(Answer.objects.answer_by_question(i), request, 10)
-    top_tags = Tag.objects.top_tags(10)
     context = {
-        "page_obj": answers,
-        "question": question,
         "best_memb_list": top_users,
-        "tags_list": top_tags,
+        "tags_list": Tag.objects.top_tags(10),
         "auth": USER['is_auth']
     }
+    try:
+        question = Question.objects.by_id(i)
+        answers = paginate(Answer.objects.answer_by_question(i), request, 10)
+        context.update({
+            "page_obj": answers,
+            "question": question,
+        })
+    except Exception:
+        return render(request, "not_found.html", context)
     return render(request, "question.html", context)
 
 
@@ -59,15 +64,24 @@ def hot_questions(request):
 
 
 def questions_with_tag(request, tag: str):
-    questions = Question.objects.by_tag(tag)
-    page_obj = paginate(questions, request, 10)
     context = {
-        "page_obj": page_obj,
         "best_memb_list": top_users,
-        "page_title": f"Tag: {tag}",
         "tags_list": Tag.objects.top_tags(10),
         "auth": USER['is_auth']
     }
+    try:
+        questions = Question.objects.by_tag(tag)
+        print(questions.count())
+        if (questions.count() == 0):
+            raise Question.DoesNotExist("asdasd")
+        page_obj = paginate(questions, request, 10)
+        context.update({
+            "page_obj": page_obj,
+            "page_title": f"Tag: {tag}",
+        })
+    except Exception:
+        return render(request, "not_found.html", context)
+
     return render(request, "index.html", context)
 
 
