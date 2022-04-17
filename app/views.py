@@ -44,7 +44,7 @@ def question(request, i: int):
             "question": question,
         })
     except Exception:
-        return render(request, "not_found.html", context)
+        return render(request, "not_found.html", context, status=404)
     return render(request, "question.html", context)
 
 
@@ -80,7 +80,7 @@ def questions_with_tag(request, tag: str):
             "page_title": f"Tag: {tag}",
         })
     except Exception:
-        return render(request, "not_found.html", context)
+        return render(request, "not_found.html", context, status=404)
 
     return render(request, "index.html", context)
 
