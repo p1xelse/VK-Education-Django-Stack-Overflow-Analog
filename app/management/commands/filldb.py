@@ -86,7 +86,7 @@ class Command(BaseCommand):
             title = self.faker.paragraph(1)[:-1] + '?'
             tag_list = list()
             cur_question = Question(
-                text=text, title=title,  profile_id=profile_id)
+                text=text, title=title, profile_id=profile_id)
             question_list.append(cur_question)
 
         q_list = Question.objects.bulk_create(question_list)
@@ -94,7 +94,7 @@ class Command(BaseCommand):
             tags_count_quiestion = random.randint(1, 5)
             for j in range(tags_count_quiestion):
                 tag = Tag.objects.get(
-                    id=random.randint(tag_id, tag_id+tags_cout-1))
+                    id=random.randint(tag_id, tag_id + tags_cout - 1))
                 q_list[i].tags.add(tag)
 
         print("Question DONE")
@@ -138,7 +138,7 @@ class Command(BaseCommand):
                     like_q_list.append(LikeQuestion(
                         question_id=question_id, profile_id=profile_id))
                     break
-        print(f"BULK CREATE LIKES {like_q_list.count()}")
+        # print(f"BULK CREATE LIKES {like_q_list.count()}")
         LikeQuestion.objects.bulk_create(like_q_list)
 
         like_a_list = list()
@@ -158,6 +158,6 @@ class Command(BaseCommand):
                         answer_id=ans_id, profile_id=profile_id))
                     break
 
-        print(f"BULK CREATE LIKES {like_a_list.count()}")
+        # print(f"BULK CREATE LIKES {like_a_list.count()}")
         LikeAnswer.objects.bulk_create(like_a_list)
         print("Likes Done")

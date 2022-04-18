@@ -72,21 +72,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'askme.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    },
-
-    'mysql': {
-        'NAME': '',
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': '',
-        'PASSWORD': ''
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'test_database',
+        'USER': 'test_user',
+        'PASSWORD': 'qwerty',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
 
