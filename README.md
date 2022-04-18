@@ -6,7 +6,7 @@ Web developer course project in techopark
 
 # hw3 
 ## Скачать бд: 
-[Ссылка](https://disk.yandex.ru/d/E1N-Vu3HmFWgCg)
+[Ссылка](https://disk.yandex.ru/d/dSGf0QY8TCXwNQ)
 
 ## Можно сгенерить 
 
