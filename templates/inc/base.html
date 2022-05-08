@@ -50,30 +50,10 @@
                         <button class="btn btn-outline-success" type="submit">Search</button>
                         <a class="ms-5 btn btn-outline-primary" href="{% url "ask" %}" type="submit">Ask!</a>
                     </form>
-                    {% block autorize_section %}
-                    {% if auth == True %}
-                    <div class="d-flex ms-auto">
-                        <a href=""><img class="profile-avatar-novbar ms-4" src="{% static "img/bmstu.png" %}"
-                                alt=""></a>
-                        <div class="autorize-section">
-                            <p class="mb-0" style="color:white">{{ user.name }}</p>
-                            <div>
-                                <a class="me-2" href="{% url "logout" %}">log out</a>
-                                <a href="{% url "settings" %}">settings</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% else %}
-                    <div class="d-flex ms-auto">
-                        <div class="autorize-section">
-                            <div>
-                                <a class="me-2" href="{% url "login" %}">log in</a>
-                                <a href="{% url "signup" %}">register</a>
-                            </div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    {% endblock autorize_section %}
+                    {% block authentication_section %}
+                    {% include "inc/authentication_section.html" %}
+                    {% endblock authentication_section %}
+
                 </div>
             </div>
         </nav>

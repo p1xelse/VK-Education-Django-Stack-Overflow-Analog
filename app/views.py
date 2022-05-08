@@ -2,6 +2,12 @@ from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from paginator import paginate
 from app.models import *
+from django.contrib import auth
+from app.forms import LoginForm, SignUpForm
+from django.urls import reverse
+from django.core.cache import cache
+
+from django.contrib.auth.decorators import login_required
 
 
 top_users = Profile.objects.get_top_users(10)
@@ -11,6 +17,7 @@ USER = {"is_auth": True}
 
 
 def index(request):
+    print(request.user)
     questions = Question.objects.new()
     page_obj = paginate(questions, request, 10)
     top_tags = Tag.objects.top_tags(10)
@@ -19,15 +26,16 @@ def index(request):
         "best_memb_list": top_users,
         "page_title": "New questions",
         "tags_list": top_tags,
-        "auth": USER['is_auth']
     }
 
     return render(request, "index.html", context)
 
 
+@login_required(login_url="login", redirect_field_name="continue")
 def ask(request):
+    print(request.user)
     return render(request, "ask.html", {"tags_list": Tag.objects.top_tags(10),
-                                        "best_memb_list": top_users, "user": USER, })
+                                        "best_memb_list": top_users})
 
 
 def question(request, i: int):
@@ -57,7 +65,6 @@ def hot_questions(request):
         "best_memb_list": top_users,
         "page_title": "Hot questions",
         "tags_list": top_tags,
-        "auth": USER['is_auth']
     }
 
     return render(request, "index.html", context)
@@ -86,23 +93,66 @@ def questions_with_tag(request, tag: str):
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect("home")
+    if request.method == "GET":
+        form = SignUpForm()
+    if request.method == "POST":
+        form = SignUpForm(data=request.POST)
+        if form.is_valid():  # add check existing
+            user = form.save()
+            auth.login(request, user)
+            return redirect("home")
+
     context = {
         "best_memb_list": top_users,
         "tags_list": Tag.objects.top_tags(10),
-        "auth": False
+        "form": form
     }
     return render(request, "signup.html", context)
 
 
 def login(request):
+    next = request.GET.get("continue")
+    if not next:
+        next = "home"
+    print("next = ", next)
+
+    if request.user.is_authenticated:
+        return redirect(next)
+    # print(request.POST)
+    if request.method == "GET":
+        form = LoginForm()
+        cache.set("continue", next)
+    if request.method == "POST":
+        form = LoginForm(data=request.POST)
+        if form.is_valid():
+            user = auth.authenticate(request, **form.cleaned_data)
+
+            if user:
+                auth.login(request, user)
+
+                next_url = cache.get('continue')
+                if not next_url:
+                    next_url = "home"
+
+                cache.delete('continue')
+                print("next = ", next_url)
+                return redirect(next_url)
+            else:
+                form.add_error(None, "Invalid password or login!")
+                form.add_error('username', "")
+                form.add_error('password', "")
+
     context = {
         "best_memb_list": top_users,
         "tags_list": Tag.objects.top_tags(10),
-        "auth": False
+        "form": form
     }
     return render(request, "login.html", context)
 
 
+@login_required(login_url="login", redirect_field_name="continue")
 def settings(request):
     context = {
         "best_memb_list": top_users,
@@ -113,5 +163,5 @@ def settings(request):
 
 
 def logout(request):
-    USER['is_auth'] = False
-    return redirect(index)
+    auth.logout(request)
+    return redirect(reverse("home"))
