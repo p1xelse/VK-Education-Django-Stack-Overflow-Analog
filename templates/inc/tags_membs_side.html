@@ -1,0 +1,17 @@
+<div class="tags-area mt-5">
+    <h2 class="mt-5">Tags</h2>
+    <div class="tags-list">
+        {% for tag in tags_list %}
+        <a href="{% url "tag" tag %}"> {{ tag }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="best-members-area mt-5">
+    <h2 class="mt-5">Best Members</h2>
+    <div class="best-members-list">
+        {% for memb in best_memb_list %}
+        <a href="#"> {{ memb }}</a>
+        {% endfor %}
+    </div>
+</div>

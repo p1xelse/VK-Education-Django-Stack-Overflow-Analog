@@ -1,0 +1,21 @@
+{% extends "inc/base.html" %}
+{% load bootstrap4 %}
+
+{% block content %}
+
+<div class="col-7 mt-5">
+    <h3>Registration</h3>
+    {% comment %} <div class="alert alert-warning" role="alert">
+        Sorry, this email address is already regisred!    
+    </div> {% endcomment %}
+    <form action="/signup/" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</div>
+
+
+{% endblock %}
+
+

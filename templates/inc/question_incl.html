@@ -1,0 +1,32 @@
+{% load static %}
+
+<div class="row answer">
+    <div class="col-2">
+        <div>
+            <img class="avatar-question" src="{% static "img/bmstu.png" %}" alt="">
+        </div>
+
+        <div>
+            <a href="#" title="Love it" class="love-btn" data-count="{{question.rating}}">
+                <span>&#x2764;</span>
+            </a>
+        </div>
+    </div>
+    <div class="col-10 ps-5">
+        <h3>
+            <a href="{% url "question" question.id %}"> {{ question.title }}</a>
+        </h3>
+        <p> {{ question.text }} </p>
+        <span class="row">
+            <a class="ans-href-with-count"
+                href="{% url "question" question.id %}">answers({{ question.answers }})</a>
+            <span style="width: auto">
+                Tags:
+                {% for tag in question.tags.all %}
+                <a href="{% url "tag" tag.name %}">{{ tag.name }}</a>
+                {% endfor %}
+            </span>
+        </span>
+    </div>
+
+</div>
