@@ -1,6 +1,7 @@
 {% extends "inc/base.html" %}
 {% load static %}
 
+{% load bootstrap4 %}
 {% block content %}
 
 <div class="row mt-5 me-3">
@@ -30,7 +31,7 @@
 
     {% for ans in page_obj %}
 
-    <div class="row answer">
+    <div id="{{ ans.id }}" class="row answer">
         <div class="col-2">
             <div>
                 <img class="avatar-question" src="{% static "img/bmstu.png" %}" alt="">
@@ -61,12 +62,11 @@
 
 
 <div class="row inpAns">
-    <div class="mb-3">
-        <label for="questionTextArea" class="form-label">Your answer</label>
-        <textarea placeholder="Enter your answer here" class="form-control" id="questionTextArea" rows="3"></textarea>
-    </div>
-
-    <button type="submit" class="btn btn-primary col-2 mb-5 btn-answer">Answer</button>
+    <form action="/question/{{ question.id }}/" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Answer</button>
+    </form>
 </div>
 
 {% endblock %}

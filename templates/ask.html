@@ -1,12 +1,14 @@
 <!doctype html>
 
 {% extends "inc/base.html" %}
+{% load bootstrap4 %}
 
 {% block content %}
 
+
 <div class="col-10">
     <h2 class="mt-5">Ask</h2>
-    <form>
+    {% comment %} <form>
         <div class="mb-3">
             <label for="input-question" class="form-label">Question title</label>
             <div class="alert alert-danger" role="alert">
@@ -24,7 +26,13 @@
             <input placeholder="Math, Phisics ..." type="text" maxlength="256" class="form-control" id="questionTags">
         </div>
         <button type="submit" class="btn btn-primary">Ask</button>
+    </form> {% endcomment %}
+    <form action="/ask/" method="POST">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit" class="btn btn-primary">Ask</button>
     </form>
+
 </div>
 
 {% endblock %}
