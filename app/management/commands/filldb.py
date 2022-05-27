@@ -8,11 +8,11 @@ import random
 
 from django.contrib.auth.models import User
 
-COUNT_USERS = 10001
-COUNT_QUESTIONS = 100001
-COUNT_ANSWERS = 1000001
-COUNT_TAGS = 10001
-LIKES = 2000001
+COUNT_USERS = 100
+COUNT_QUESTIONS = 100
+COUNT_ANSWERS = 100
+COUNT_TAGS = 100
+LIKES = 2000
 
 
 class Command(BaseCommand):

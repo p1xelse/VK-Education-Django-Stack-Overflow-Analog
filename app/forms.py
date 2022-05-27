@@ -25,21 +25,22 @@ class SignUpForm(forms.ModelForm):
         widgets = {
             "username": forms.TextInput(attrs={"class": "mb-3"}),
             "first_name": forms.TextInput(attrs={"class": "mb-3"}),
-            "email": forms.TextInput(attrs={"class": "mb-3"}),
+            "email": forms.EmailInput(attrs={"class": "mb-3"}),
         }
 
     def clean(self):
         cleaned_data = super().clean()
+        print(self.errors)
         pass1 = cleaned_data['password']
         pass2 = cleaned_data['password_repeat']
 
         if pass1 != pass2:
             self.add_error('password_repeat', "Passwords do not match")
 
-        count_usrs_email = User.objects.filter(email=self.cleaned_data['email']).count()
-
-        if count_usrs_email > 0:
-            self.add_error('email', "User with this email is already registered")
+        if ('email' in cleaned_data.keys()):
+            count_usrs_email = User.objects.filter(email=cleaned_data['email']).count()
+            if count_usrs_email > 0:
+                self.add_error('email', "User with this email is already registered")
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -55,8 +56,19 @@ class SignUpForm(forms.ModelForm):
 
 
 class SettingsForm(forms.ModelForm):
+    username = forms.CharField(disabled=True)
     avatar = forms.FileField(label="Avatar image", required=False, widget=forms.FileInput(
         attrs={"class": "col-md-9 pe-5 mb-3"}))
+
+    def save(self):
+        user = super().save()
+
+        profile = user.profile
+        if self.cleaned_data['avatar']:
+            profile.avatar = self.cleaned_data['avatar']
+        profile.save()
+
+        return user
 
     class Meta:
         model = User

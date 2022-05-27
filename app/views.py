@@ -1,3 +1,5 @@
+from readline import insert_text
+from django.forms import model_to_dict
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from paginator import paginate
@@ -183,11 +185,14 @@ def login(request):
 
 @login_required(login_url="login", redirect_field_name="continue")
 def settings(request):
-    user = User.objects.get(id=request.user.id)
     if request.method == "GET":
-        form = SettingsForm(instance=user)
+        initial_data = model_to_dict(request.user)
+        initial_data['avatar'] = request.user.profile.avatar
+        form = SettingsForm(initial=initial_data)
     if request.method == "POST":
-        form = SettingsForm(request.POST, instance=user)
+        initial_data = request.POST
+        instance = request.user
+        form = SettingsForm(request.POST, instance=instance, files=request.FILES)
         if form.is_valid():  # add check existing
             form.save()
             return redirect("settings")
