@@ -1,0 +1,24 @@
+{% load static %}
+
+{% if user.is_authenticated %}
+<div class="d-flex ms-auto">
+    <a href=""><img class="profile-avatar-novbar ms-4" src="{{ request.user.profile.avatar.url }}" alt=""></a>
+    <div class="autorize-section">
+        <p class="mb-0" style="color:white">{{ user.username }}</p>
+        <div>
+            <a class="me-2" href="{% url "logout" %}">log out</a>
+            <a href="{% url "settings" %}">settings</a>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="d-flex ms-auto">
+    <div class="autorize-section">
+        <div>
+            <a class="me-2" href="{% url "login" %}">log in</a>
+            <a href="{% url "signup" %}">register</a>
+        </div>
+    </div>
+</div>
+
+{% endif %}
