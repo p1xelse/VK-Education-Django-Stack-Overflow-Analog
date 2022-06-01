@@ -148,7 +148,8 @@ def signup(request):
 
 def login(request):
     next = request.GET.get("continue")
-    if not next:
+    print(next)
+    if not next or next[0] != '/':
         next = "home"
 
     if request.user.is_authenticated:
@@ -193,7 +194,7 @@ def settings(request):
         initial_data = request.POST
         instance = request.user
         form = SettingsForm(request.POST, instance=instance, files=request.FILES)
-        if form.is_valid():  # add check existing
+        if form.is_valid():
             form.save()
             return redirect("settings")
 

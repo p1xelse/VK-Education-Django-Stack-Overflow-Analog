@@ -30,7 +30,6 @@ class SignUpForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        print(self.errors)
         pass1 = cleaned_data['password']
         pass2 = cleaned_data['password_repeat']
 
@@ -38,9 +37,17 @@ class SignUpForm(forms.ModelForm):
             self.add_error('password_repeat', "Passwords do not match")
 
         if ('email' in cleaned_data.keys()):
+            if len(cleaned_data['email']) == 0:
+                self.add_error('email', "Email cannot be empty")
+                return cleaned_data
             count_usrs_email = User.objects.filter(email=cleaned_data['email']).count()
             if count_usrs_email > 0:
                 self.add_error('email', "User with this email is already registered")
+        else:
+            self.add_error('email', "Uncorrect email")
+        
+        return cleaned_data
+
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -74,13 +81,33 @@ class SettingsForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'first_name']
         labels = {
-            'first_name': 'Nick name'
+            'first_name': 'Nickname'
         }
         widgets = {
             "username": forms.TextInput(attrs={"class": "mb-3"}),
             "first_name": forms.TextInput(attrs={"class": "mb-3"}),
-            "email": forms.TextInput(attrs={"class": "mb-3"}),
+            "email": forms.EmailInput(attrs={"class": "mb-3"}),
         }
+    def clean(self):
+        cleaned_data = super().clean()
+        changed_data = self.changed_data
+
+        if len(changed_data) == 0:
+            return cleaned_data
+
+        if ('email' in cleaned_data.keys()):
+            if len(cleaned_data['email']) == 0:
+                self.add_error('email', "Email cannot be empty")
+                return cleaned_data
+            
+            if ('email' in changed_data):
+                count_usrs_email = User.objects.filter(email=cleaned_data['email']).count()
+                if count_usrs_email > 0:
+                    self.add_error('email', "User with this email is already registered")
+        else:
+            self.add_error('email', "Uncorrect email")
+        
+
 
 
 class QuestionForm(forms.ModelForm):
