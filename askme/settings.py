@@ -78,13 +78,15 @@ WSGI_APPLICATION = 'askme.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'test_database',
-        'USER': 'test_user',
-        'PASSWORD': 'qwerty',
-        'HOST': 'localhost',
-        'PORT': '',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'postgres',
+        'PORT': '5432',
     }
 }
+
+## p1xelpostgresdbcon
 
 
 # Password validation
